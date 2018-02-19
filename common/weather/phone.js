@@ -42,11 +42,11 @@ export default class Weather {
   
   fetch() {
     let now = new Date().getTime();
-    if(this._weather !== undefined && this._weather.timestamp !== undefined && (now - this._weather.timestamp < this._maximumAge)) {
-      // return previous weather if the maximu age is not reached
-      if(this.onsuccess) this.onsuccess(this._weather);
-      return;
-    }
+    // if(this._weather !== undefined && this._weather.timestamp !== undefined && (now - this._weather.timestamp < this._maximumAge)) {
+    //   // return previous weather if the maximu age is not reached
+    //   if(this.onsuccess) this.onsuccess(this._weather);
+    //   return;
+    // }
     
     geolocation.getCurrentPosition(
       (position) => {
@@ -361,7 +361,7 @@ function prv_queryYahooWeather(latitude, longitude, success, error) {
   var url = 'https://query.yahooapis.com/v1/public/yql?q=select astronomy, location.city, item.condition, item.forecast from weather.forecast where woeid in '+
           '(select woeid from geo.places(1) where text=\'(' + latitude+','+longitude+')\') and u=\'c\'&format=json';
 
-  console.log(encodeURI(url))
+  // console.log(encodeURI(url))
   
   fetch(encodeURI(url))
   .then((response) => {

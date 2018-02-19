@@ -3,8 +3,8 @@ import { outbox } from "file-transfer";
 import { encode } from "cbor"
 import { me } from "companion"
 
-// wake every 15 minutes and refresh weather
-me.wakeInterval = 15 * 60 * 1000
+// wake every 5 minutes and refresh weather
+me.wakeInterval = 5 * 60 * 1000
 
 console.log("Started companion!");
 
@@ -30,7 +30,10 @@ weather.onsuccess = (data) => {
 weather.onerror = (error) => {
   console.log("Weather error " + JSON.stringify(error));
 }
-
+if (me.launchReasons.wokenUp) {
+  // The companion started due to a periodic timer
+  console.log("Companion launched by wake interval");
+}
 weather.fetch();
 // Close the companion and wait to be awoken
 me.yield()
