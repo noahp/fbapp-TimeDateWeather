@@ -1,6 +1,10 @@
 # TimeDateWeather
 Super basic date + time + weather (and day's forecast) + steps + hr. No fuss. Yahoo weather api.
 
+![screencap](screencap.png)
+
+Today's forecast is in orange- will be either "Rain", "Snow", "Clouds", or "Clear", summarizing the day's forecast.
+
 # Attribution
 ## Icons
 Icons courtesy of:
@@ -10,3 +14,6 @@ Icons courtesy of:
 ## Weather
 Weather module courtesy of:
 https://github.com/gregoiresage/fitbit-weather
+
+# License
+No license, do whatever you want!
