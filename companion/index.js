@@ -30,10 +30,15 @@ weather.onsuccess = (data) => {
 weather.onerror = (error) => {
   console.log("Weather error " + JSON.stringify(error));
 }
-if (me.launchReasons.wokenUp) {
-  // The companion started due to a periodic timer
-  console.log("Companion launched by wake interval");
+
+// Update weather at least every 10 minutes when running
+// TODO this doesn't work, y tho >_<
+setInterval(weather.fetch, 10*60*1000);
+
+me.onwakeinterval = (evt) => {
+  console.log("Wakeup interval");
+  weather.fetch();
 }
+
+// Freshen up weather data on launch
 weather.fetch();
-// Close the companion and wait to be awoken
-me.yield()

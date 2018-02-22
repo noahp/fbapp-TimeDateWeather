@@ -47,31 +47,50 @@ clock.ontick = (evt) => {
   
   // Steps
   let steps = userActivity.today.adjusted["steps"] || 0;
+  let step_fontsize = 24; // TODO pull this from the stylesheet?
   if (steps > 99999) {
-    document.getElementById("steps").style.fontSize = 18;
+    step_fontsize = 18;
   }
+  document.getElementById("steps").style.fontSize = step_fontsize;
   document.getElementById("steps").text = steps;
 }
 
 function weatherFromFile() {
   // Refresh weather data from current file
-  let weatherjson  = fs.readFileSync("weather.cbor", "cbor");
+  let now = new Date().getTime();
+  let stale = false;
+  try {
+    let weatherjson  = fs.readFileSync("weather.cbor", "cbor");
+  } catch(e) {
+    console.log("Error " + e);
+    let weatherjson = {
+      temperatureF : "NA",
+      location : "<unknown>",
+      forecast : "",
+      conditionCode : 1000,
+      timestamp : now - 30 * 60 * 1000 + 1,
+    };
+    stale = true;
+  }
   
   // staleness check
-  let now = new Date().getTime();
- 
-  let stale = false;
   if (now - weatherjson.timestamp > 30 * 60 * 1000) {
     stale = true;
     weatherjson.location = "<unknown>";
     weatherjson.forecast = "";
     weatherjson.conditionCode = 1000;
   }
-  // else {
-  //   console.log("Weather data read: " + JSON.stringify(weatherjson));
-  // }
+  else {
+    console.log("Weather data read: " + JSON.stringify(weatherjson));
+  }
   
   document.getElementById("weather_temperature").text = (stale ? "NA" : weatherjson.temperatureF.toFixed(0)) + "°F";
+  
+  let forecast_fontsize = 32; // TODO pull this from the stylesheet?
+  if (weatherjson.forecast.length > 5) {
+    forecast_fontsize = 28;
+  }
+  document.getElementById("weather_forecast").style.fontSize = forecast_fontsize;
   document.getElementById("weather_forecast").text = weatherjson.forecast;
   document.getElementById("weather_location").text = weatherjson.location.substring(0, 16);
   
@@ -87,9 +106,16 @@ function weatherFromFile() {
     6 : "6_storm.png",
     7 : "7_snowy.png",
     8 : "8_haze.png",
+    9 : "3_cloud.png",
     1000 : "1000_question.png",
   }
   document.getElementById("weather_icon").href = `weather/${conditionToIcon[weatherjson.conditionCode]}`
+}
+
+document.getElementById("myRect");
+
+document.getElementById("weather_forecast").onclick = function(e) {
+  console.log("click");
 }
 
 // always check for new files on launch

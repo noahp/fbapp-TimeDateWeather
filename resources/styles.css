@@ -2,9 +2,12 @@
   viewport-fill: black;
 }
 
-#date {
-  font-size: 30;
-  font-family: System-Bold;
+text {
+  font-family: Colfax-Medium;
+}
+
+text#date {
+  font-size: 29;
 /*   text-length: 32; */
   text-anchor: middle;
 /*   x: 50%; */
@@ -12,9 +15,8 @@
   fill: fb-yellow;
 }
 
-#time {
+text#time {
   font-size: 100;
-  font-family: System-Bold;
 /*   text-length: 32; */
   text-anchor: middle;
 /*   x: 50%; */
@@ -22,9 +24,8 @@
   fill: fb-lime;
 }
 
-#weather_temperature {
+text#weather_temperature {
   font-size: 30;
-  font-family: System-Bold;
   text-length: 32;
   text-anchor: start;
 /*   x: 50%; */
@@ -32,9 +33,8 @@
   fill: fb-pink;
 }
 
-#weather_forecast {
+text#weather_forecast {
   font-size: 30;
-  font-family: System-Bold;
   text-length: 32;
   text-anchor: end;
 /*   x: 50%; */
@@ -42,9 +42,8 @@
   fill: fb-orange;
 }
 
-#weather_location {
+text#weather_location {
   font-size: 18;
-  font-family: System-Bold;
   text-length: 16;
   text-anchor: start;
 /*   x: 50%; */

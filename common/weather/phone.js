@@ -351,6 +351,9 @@ function prv_ywCodeToCondition(condition) {
     case 27 :
     case 28 :
       condition = Conditions.BrokenClouds; break;
+    case 23 :
+    case 24 :
+      condition = Conditions.Breezy; break;
     default : condition = Conditions.Unknown; break;
   }
   
@@ -361,7 +364,7 @@ function prv_queryYahooWeather(latitude, longitude, success, error) {
   var url = 'https://query.yahooapis.com/v1/public/yql?q=select astronomy, location.city, item.condition, item.forecast from weather.forecast where woeid in '+
           '(select woeid from geo.places(1) where text=\'(' + latitude+','+longitude+')\') and u=\'c\'&format=json';
 
-  // console.log(encodeURI(url))
+  console.log(encodeURI(url))
   
   fetch(encodeURI(url))
   .then((response) => {
@@ -372,7 +375,7 @@ function prv_queryYahooWeather(latitude, longitude, success, error) {
         if(error) error(data);
         return;
       }
-
+      
       var condition = parseInt(data.query.results.channel[0].item.condition.code);
       condition = prv_ywCodeToCondition(condition);
 

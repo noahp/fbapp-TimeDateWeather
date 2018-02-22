@@ -8,6 +8,7 @@ export const Conditions = {
   Thunderstorm    : 6,
   Snow            : 7,
   Mist            : 8,
+  Breezy          : 9,
   Unknown         : 1000,
 };
 
