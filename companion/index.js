@@ -2,6 +2,7 @@ import Weather from '../common/weather/phone.js';
 import { outbox } from "file-transfer";
 import { encode } from "cbor"
 import { me } from "companion"
+import { settingsStorage } from "settings";
 
 // wake every 5 minutes and refresh weather
 me.wakeInterval = 5 * 60 * 1000
@@ -15,6 +16,15 @@ weather.setApiKey("mykey");
 weather.setFeelsLike(true);
 
 weather.onsuccess = (data) => {
+  // set celsius/fahrenheit setting
+    let is_celsius = settingsStorage.getItem("CelsiusOrFahrenheit") ? 
+      JSON.parse(settingsStorage.getItem("CelsiusOrFahrenheit"))["values"][0]["name"] == "Celsius": null;
+  if (is_celsius) {
+    data["is_celsius"] = true;
+  }
+  else {
+    data["is_celsius"] = false;
+  }
   let weatherdata = JSON.stringify(data);
   console.log("Weather is " + weatherdata);
   
@@ -38,6 +48,13 @@ setInterval(weather.fetch, 10*60*1000);
 me.onwakeinterval = (evt) => {
   console.log("Wakeup interval");
   weather.fetch();
+}
+
+// refresh weather on settings change
+settingsStorage.onchange = function(evt) {
+  if (evt.key == "CelsiusOrFahrenheit") {
+    weather.fetch();
+  }
 }
 
 // Freshen up weather data on launch

@@ -44,7 +44,7 @@ clock.ontick = (evt) => {
 
   // Refresh weather
   weatherFromFile();
-  
+
   // Steps
   let steps = userActivity.today.adjusted["steps"] || 0;
   let step_fontsize = 24; // TODO pull this from the stylesheet?
@@ -72,9 +72,10 @@ function weatherFromFile() {
     };
     stale = true;
   }
-  
+
   // staleness check
-  if (now - weatherjson.timestamp > 30 * 60 * 1000) {
+  let minutes_to_stale = 60;
+  if (now - weatherjson.timestamp > minutes_to_stale * 60 * 1000) {
     stale = true;
     weatherjson.location = "<unknown>";
     weatherjson.forecast = "";
@@ -83,9 +84,24 @@ function weatherFromFile() {
   else {
     console.log("Weather data read: " + JSON.stringify(weatherjson));
   }
-  
-  document.getElementById("weather_temperature").text = (stale ? "NA" : weatherjson.temperatureF.toFixed(0)) + "°F";
-  
+
+  let temp_text = "";
+  let temp_suffix = "";
+  let is_celsius = weatherjson.is_celsius;
+  if (!stale) {
+    if (is_celsius) {
+      temp_text = weatherjson.temperatureC.toFixed(0);
+      temp_suffix = "°C";
+    }
+    else {
+      // fahrenheit
+      temp_text = weatherjson.temperatureF.toFixed(0);
+      temp_suffix = "°F";
+    }
+  }
+
+  document.getElementById("weather_temperature").text = temp_text + temp_suffix;
+
   let forecast_fontsize = 32; // TODO pull this from the stylesheet?
   if (weatherjson.forecast.length > 5) {
     forecast_fontsize = 28;
@@ -93,7 +109,7 @@ function weatherFromFile() {
   document.getElementById("weather_forecast").style.fontSize = forecast_fontsize;
   document.getElementById("weather_forecast").text = weatherjson.forecast;
   document.getElementById("weather_location").text = weatherjson.location.substring(0, 16);
-  
+
   // update icon. TODO add night variants
   // icons from here: https://www.flaticon.com/packs/weather-97
   const conditionToIcon = {

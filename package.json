@@ -12,6 +12,9 @@
       "run_background",
       "access_heart_rate"
     ],
+    "buildTargets": [
+      "higgs"
+    ],
     "i18n": {
       "en": {
         "name": "Time/Date/Weather"
