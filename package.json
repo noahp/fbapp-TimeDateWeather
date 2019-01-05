@@ -1,4 +1,9 @@
 {
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/noahp/fbapp-TimeDateWeather.git"
+  },
+  "license": "SEE LICENSE IN LICENSE",
   "fitbit": {
     "appUUID": "9441c0d4-3370-4295-9df7-c4e1edad8ade",
     "appType": "clockface",
@@ -20,5 +25,12 @@
         "name": "Time/Date/Weather"
       }
     }
+  },
+  "dependencies": {
+    "npx": "^10.2.0"
+  },
+  "devDependencies": {
+    "@fitbit/sdk": "^1.0.5",
+    "@fitbit/sdk-cli": "^1.5.0"
   }
 }
