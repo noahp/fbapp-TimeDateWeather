@@ -1,5 +1,6 @@
 # TimeDateWeather
-Super basic date + time + weather (and day's forecast) + steps + hr. No fuss. Yahoo weather api.
+Super basic date + time + weather (and day's forecast) + steps + hr. No fuss.
+[Open weather map api](https://openweathermap.org/api).
 
 ![screencap](screencap.png)
 
