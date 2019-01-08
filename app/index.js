@@ -40,7 +40,13 @@ clock.ontick = (evt) => {
   const dayOfWeekNames = ["Sunday", "Monday", "Tuesday", "Wednesday",
     "Thursday", "Friday", "Saturday"
   ];
-  document.getElementById("date").text = `${dayOfWeekNames[today.getDay()]}, ${monthNames[today.getMonth()]} ${today.getDate()}`
+  let date = `${dayOfWeekNames[today.getDay()]}, ${monthNames[today.getMonth()]} ${today.getDate()}`;
+  let date_fontsize = 29; // TODO pull from stylesheet...
+  if (date.length > 21) {
+    date_fontsize = 27;
+  }
+  document.getElementById("date").style.fontSize = date_fontsize;
+  document.getElementById("date").text = date;
 
   // Refresh weather
   weatherFromFile();

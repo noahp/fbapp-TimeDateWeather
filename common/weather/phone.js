@@ -4,17 +4,17 @@ import { geolocation } from "geolocation";
 import { WEATHER_MESSAGE_KEY, Conditions } from './common.js';
 
 export default class Weather {
-  
+
   constructor() {
     this._apiKey = '';
-    this._provider = 'yahoo';
+    this._provider = 'owm';
     this._feelsLike = true;
     this._weather = undefined;
     this._maximumAge = 0;
 
     this.onerror = undefined;
     this.onsuccess = undefined;
-    
+
     peerSocket.addEventListener("message", (evt) => {
       // We are receiving a request from the app
       if (evt.data !== undefined && evt.data[WEATHER_MESSAGE_KEY] !== undefined) {
@@ -23,23 +23,23 @@ export default class Weather {
       }
     });
   }
-  
+
   setApiKey(apiKey) {
     this._apiKey = apiKey;
   }
-  
+
   setProvider(provider) {
     this._provider = provider;
   }
-  
+
   setFeelsLike(feelsLike) {
     this._feelsLike = feelsLike;
   }
-  
+
   setMaximumAge(maximumAge) {
     this._maximumAge = maximumAge;
   }
-  
+
   fetch() {
     let now = new Date().getTime();
     // if(this._weather !== undefined && this._weather.timestamp !== undefined && (now - this._weather.timestamp < this._maximumAge)) {
@@ -47,20 +47,20 @@ export default class Weather {
     //   if(this.onsuccess) this.onsuccess(this._weather);
     //   return;
     // }
-    
+
     geolocation.getCurrentPosition(
       (position) => {
         //console.log("Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude);
-        prv_fetch(this._provider, this._apiKey, this._feelsLike, position.coords.latitude, position.coords.longitude, 
+        prv_fetch(this._provider, this._apiKey, this._feelsLike, position.coords.latitude, position.coords.longitude,
               (data) => {
                 this._weather = data;
                 if(this.onsuccess) this.onsuccess(data);
-              }, 
+              },
               this.onerror);
-      }, 
+      },
       (error) => {
         if(this.onerror) this.onerror(error);
-      }, 
+      },
       {"enableHighAccuracy" : false, "maximumAge" : 1000 * 1800});
   }
 };
@@ -82,28 +82,28 @@ function prv_fetchRemote(provider, apiKey, feelsLike) {
               console.log("Error: Connection is not open with the device");
             }
           },
-          (error) => { 
+          (error) => {
             if (peerSocket.readyState === peerSocket.OPEN) {
               let answer = {};
-              answer[WEATHER_MESSAGE_KEY] = { error : error };  
+              answer[WEATHER_MESSAGE_KEY] = { error : error };
               peerSocket.send( answer );
             }
             else {
-              console.log("Error : " + JSON.stringify(error) + " " + error); 
+              console.log("Error : " + JSON.stringify(error) + " " + error);
             }
           }
       );
-    }, 
+    },
     (error) => {
       if (peerSocket.readyState === peerSocket.OPEN) {
         let answer = {};
-        answer[WEATHER_MESSAGE_KEY] = { error : error };  
+        answer[WEATHER_MESSAGE_KEY] = { error : error };
         peerSocket.send( answer );
       }
       else {
-        console.log("Location Error : " + error.message); 
+        console.log("Location Error : " + error.message);
       }
-    }, 
+    },
     {"enableHighAccuracy" : false, "maximumAge" : 1000 * 1800});
 }
 
@@ -118,19 +118,73 @@ function prv_fetch(provider, apiKey, feelsLike, latitude, longitude, success, er
   else if( provider === "darksky" ) {
     prv_queryDarkskyWeather(apiKey, feelsLike, latitude, longitude, success, error);
   }
-  else 
+  else
   {
     prv_queryYahooWeather(latitude, longitude, success, error);
   }
 }
 
+function prv_owm_condition_to_forecast(condition) {
+  // see here for codes:
+  // https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
+  if (condition < 600) {
+    return "Rain";
+  }
+  else if (condition < 700) {
+    return "Snow";
+  }
+  else if (condition < 800) {
+    return "Fog";
+  }
+  else if (condition === 800) {
+    return "Clear";
+  }
+  else {
+    return "Clouds";
+  }
+}
+
 function prv_queryOWMWeather(apiKey, latitude, longitude, success, error) {
+  // fetch forecast, and when done, fire off current conditions check, which
+  // execute the success callback
+  var url = 'https://api.openweathermap.org/data/2.5/forecast?appid=' + apiKey + '&lat=' + latitude + '&lon=' + longitude;
+  var forecast = "";
+
+  fetch(url)
+    .then((response) => { return response.json() })
+    .then((data) => {
+      console.log(url);
+
+      // check for icky weather! first rain/snow etc type is used. check the
+      // next 12 hrs
+      // Dumb that I can't seem to use for (var x in data.list) below >_<, x is
+      // undefined for some reason
+      for (let index = 0; index < 4; index++) {
+        let condition = parseInt(data.list[index].weather[0].id);
+
+        forecast = prv_owm_condition_to_forecast(condition);
+
+        if (condition < 800) {
+          break;
+        }
+      }
+      prv_queryOWMWeatherCurrentConditionsAndResult(forecast, apiKey, latitude, longitude, success, error);
+    })
+    .catch((err) => {
+      console.log(err);
+      return forecast;
+    });
+}
+
+function prv_queryOWMWeatherCurrentConditionsAndResult(forecast, apiKey, latitude, longitude, success, error) {
   var url = 'https://api.openweathermap.org/data/2.5/weather?appid=' + apiKey + '&lat=' + latitude + '&lon=' + longitude;
 
   fetch(url)
   .then((response) => {return response.json()})
-  .then((data) => { 
-      
+  .then((data) => {
+
+    console.log(url);
+
       if(data.weather === undefined){
         if(error) error(data);
         return;
@@ -149,6 +203,7 @@ function prv_queryOWMWeather(apiKey, latitude, longitude, success, error) {
         case 50 : condition = Conditions.Mist; break;
         default : condition = Conditions.Unknown; break;
       }
+
       let weather = {
         //temperatureK : data.main.temp.toFixed(1),
         temperatureC : data.main.temp - 273.15,
@@ -159,7 +214,8 @@ function prv_queryOWMWeather(apiKey, latitude, longitude, success, error) {
         conditionCode : condition,
         sunrise : data.sys.sunrise * 1000,
         sunset : data.sys.sunset * 1000,
-        timestamp : new Date().getTime()
+        timestamp : new Date().getTime(),
+        forecast : forecast
       };
       // Send the weather data to the device
       if(success) success(weather);
@@ -172,8 +228,8 @@ function prv_queryWUWeather(apiKey, feelsLike, latitude, longitude, success, err
 
   fetch(url)
   .then((response) => {return response.json()})
-  .then((data) => { 
-      
+  .then((data) => {
+
       if(data.current_observation === undefined){
         if(error) error(data);
         return;
@@ -233,8 +289,8 @@ function prv_queryDarkskyWeather(apiKey, feelsLike, latitude, longitude, success
 
   fetch(url)
   .then((response) => {return response.json()})
-  .then((data) => {        
-    
+  .then((data) => {
+
       if(data.currently === undefined){
         if(error) error(data);
         return;
@@ -280,23 +336,23 @@ function prv_queryDarkskyWeather(apiKey, feelsLike, latitude, longitude, success
         sunset : data.daily.data[0].sunsetTime * 1000,
         timestamp : new Date().getTime()
       };
-    
+
       // retreiving location name from Open Street Map
       let url = 'https://nominatim.openstreetmap.org/reverse?lat=' + latitude + '&lon=' + longitude + '&format=json&accept-language=en-US';
-    
+
       fetch(url)
         .then((response) => {return response.json()})
-        .then((data) => { 
-        
+        .then((data) => {
+
              if (data.address.hamlet != undefined) weather.location = data.address.hamlet
              else if (data.address.village != undefined) weather.location = data.address.village
-             else if (data.address.town != undefined) weather.location = data.address.town 
-             else if (data.address.city != undefined) weather.location = data.address.city   
-        
+             else if (data.address.town != undefined) weather.location = data.address.town
+             else if (data.address.city != undefined) weather.location = data.address.city
+
             // Send the weather data to the device
-            if(success) success(weather);        
-        
-      }).catch((err) => { 
+            if(success) success(weather);
+
+      }).catch((err) => {
             if(success) success(weather); // if location name not found - sending weather without location
       });
   })
@@ -356,7 +412,7 @@ function prv_ywCodeToCondition(condition) {
       condition = Conditions.Breezy; break;
     default : condition = Conditions.Unknown; break;
   }
-  
+
   return condition;
 }
 
@@ -365,24 +421,24 @@ function prv_queryYahooWeather(latitude, longitude, success, error) {
           '(select woeid from geo.places(1) where text=\'(' + latitude+','+longitude+')\') and u=\'c\'&format=json';
 
   console.log(encodeURI(url))
-  
+
   fetch(encodeURI(url))
   .then((response) => {
     response.json()
     .then((data) => {
-      
+
       if(data.query === undefined || data.query.results === undefined || data.query.results.channel === undefined) {
         if(error) error(data);
         return;
       }
-      
+
       var condition = parseInt(data.query.results.channel[0].item.condition.code);
       condition = prv_ywCodeToCondition(condition);
 
       var current_time = new Date();
       var sunrise_time = prv_timeParse(data.query.results.channel[0].astronomy.sunrise);
       var sunset_time  = prv_timeParse(data.query.results.channel[0].astronomy.sunset);
-      
+
       // forecast string
       var forecast = parseInt(data.query.results.channel[0].item.forecast.code);
       forecast = prv_ywCodeToCondition(forecast);
@@ -406,7 +462,7 @@ function prv_queryYahooWeather(latitude, longitude, success, error) {
           forecast = "";
           break;
       }
-      
+
       let weather = {
         //temperatureK : (parseInt(data.query.results.channel.item.condition.temp) + 273.15),
         temperatureC : parseInt(data.query.results.channel[0].item.condition.temp),

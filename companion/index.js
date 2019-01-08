@@ -11,13 +11,15 @@ console.log("Started companion!");
 
 let weather = new Weather();
 
-weather.setProvider("yahoo"); // only support yahoo for now
-weather.setApiKey("mykey");
+weather.setProvider("owm"); // only support owm for now
+weather.setApiKey(
+  settingsStorage.getItem("owm_apikey") ? settingsStorage.getItem("owm_apikey") : "76fa7dd2f60e6e7eb5421f1512b9dbc3"
+);
 weather.setFeelsLike(true);
 
 weather.onsuccess = (data) => {
   // set celsius/fahrenheit setting
-    let is_celsius = settingsStorage.getItem("CelsiusOrFahrenheit") ? 
+    let is_celsius = settingsStorage.getItem("CelsiusOrFahrenheit") ?
       JSON.parse(settingsStorage.getItem("CelsiusOrFahrenheit"))["values"][0]["name"] == "Celsius": null;
   if (is_celsius) {
     data["is_celsius"] = true;
@@ -27,7 +29,7 @@ weather.onsuccess = (data) => {
   }
   let weatherdata = JSON.stringify(data);
   console.log("Weather is " + weatherdata);
-  
+
   // transmit the data over ft
   let filename = "weather.cbor";
   outbox.enqueue(filename, encode(data)).then((ft) => {
