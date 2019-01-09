@@ -1,0 +1,10 @@
+# use docker to avoid tinkering with travis forever
+sudo: required
+
+language: generic
+
+services:
+  - docker
+
+script:
+  - cd $TRAVIS_BUILD_DIR && ./tests.sh

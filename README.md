@@ -1,3 +1,5 @@
+[![Build Status](https://img.shields.io/travis/com/noahp/fbapp-TimeDateWeather.svg?style=popout-square&logo=travis)](https://travis-ci.com/noahp/fbapp-TimeDateWeather)
+
 # TimeDateWeather
 Super basic date + time + weather (and day's forecast) + steps + hr. No fuss.
 [Open weather map api](https://openweathermap.org/api).
