@@ -37,15 +37,21 @@ clock.ontick = (evt) => {
   const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
   ];
+  const shortMonthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+  "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+];
   const dayOfWeekNames = ["Sunday", "Monday", "Tuesday", "Wednesday",
     "Thursday", "Friday", "Saturday"
   ];
-  let date = `${dayOfWeekNames[today.getDay()]}, ${monthNames[today.getMonth()]} ${today.getDate()}`;
-  let date_fontsize = 29; // TODO pull from stylesheet...
-  if (date.length > 21) {
-    date_fontsize = 27;
+
+  // use shortened month form if we overflow the buffer
+  let dayofweek = today.getDay();
+  let month = today.getMonth();
+  let month_date = today.getDate();
+  let date = `${dayOfWeekNames[dayofweek]}, ${monthNames[month]} ${month_date}`;
+  if (date.length > 20) {  // TODO get from stylesheet?
+    date = `${dayOfWeekNames[dayofweek]}, ${shortMonthNames[month]} ${month_date}`
   }
-  document.getElementById("date").style.fontSize = date_fontsize;
   document.getElementById("date").text = date;
 
   // Refresh weather
