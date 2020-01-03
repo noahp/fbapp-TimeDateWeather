@@ -18,7 +18,10 @@
       "access_heart_rate"
     ],
     "buildTargets": [
-      "higgs"
+      "higgs",
+      "meson",
+      "gemini",
+      "mira"
     ],
     "i18n": {
       "en": {
@@ -30,8 +33,8 @@
     "npx": "^10.2.0"
   },
   "devDependencies": {
-    "@fitbit/sdk": "~4.0.0",
-    "@fitbit/sdk-cli": "^1.7.0"
+    "@fitbit/sdk": "~4.1.0",
+    "@fitbit/sdk-cli": "~1.7.1"
   },
   "scripts": {
     "build": "fitbit-build"

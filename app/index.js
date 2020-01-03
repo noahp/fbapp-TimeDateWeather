@@ -10,6 +10,14 @@ import { HeartRateSensor } from "heart-rate";
 // Tick fires every minute
 clock.granularity = "minutes";
 
+// These are modified at runtime, save initial values
+const steps_fontSize = document.getElementById("steps").style.fontSize;
+const weather_forecast_fontSize = document.getElementById("weather_forecast").style.fontSize;
+
+// Detect screen size
+import { me as device } from "device";
+if (!device.screen) device.screen = { width: 348, height: 250 };
+
 // Update hr every reading
 var hrm = new HeartRateSensor();
 
@@ -59,9 +67,11 @@ clock.ontick = (evt) => {
 
   // Steps
   let steps = userActivity.today.adjusted["steps"] || 0;
-  let step_fontsize = 24; // TODO pull this from the stylesheet?
-  if (steps > 99999) {
-    step_fontsize = 18;
+  let step_fontsize = steps_fontSize;
+
+  // If device is 300 pixels high (versa), don't scale down steps
+  if ((device.screen.height < 300) && (steps > 99999)) {
+    step_fontsize = steps_fontSize - 6;
   }
   document.getElementById("steps").style.fontSize = step_fontsize;
   document.getElementById("steps").text = steps;
@@ -114,9 +124,9 @@ function weatherFromFile() {
 
   document.getElementById("weather_temperature").text = temp_text + temp_suffix;
 
-  let forecast_fontsize = 32; // TODO pull this from the stylesheet?
+  let forecast_fontsize = weather_forecast_fontSize;
   if (weatherjson.forecast.length > 5) {
-    forecast_fontsize = 28;
+    forecast_fontsize = weather_forecast_fontSize - 4;
   }
   document.getElementById("weather_forecast").style.fontSize = forecast_fontsize;
   document.getElementById("weather_forecast").text = weatherjson.forecast;
