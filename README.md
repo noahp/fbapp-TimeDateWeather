@@ -6,7 +6,12 @@ Super basic date + time + weather (and day's forecast) + steps + hr. No fuss.
 
 ![screencap](screencap.png)
 
-Today's forecast is in orange- will be either "Rain", "Snow", "Clouds", or "Clear", summarizing the day's forecast.
+Today's forecast is in orange- will be either "Rain", "Snow", "Clouds", or
+"Clear", summarizing the day's forecast.
+
+*Note: if weather data doesn't update after installing, go to the clockface's
+settings and select either "Celsius" or "Fahrenheit", which will force a weather
+refresh*
 
 # Attribution
 ## Icons
