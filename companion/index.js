@@ -4,8 +4,8 @@ import { encode } from "cbor"
 import { me } from "companion"
 import { settingsStorage } from "settings";
 
-// wake every 5 minutes and refresh weather
-me.wakeInterval = 5 * 60 * 1000
+// wake every 10 minutes and refresh weather
+me.wakeInterval = 10 * 60 * 1000
 
 console.log("Started companion!");
 
