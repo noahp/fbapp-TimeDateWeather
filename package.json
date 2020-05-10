@@ -21,7 +21,9 @@
       "higgs",
       "meson",
       "gemini",
-      "mira"
+      "mira",
+      "atlas",
+      "vulcan"
     ],
     "i18n": {
       "en": {
@@ -30,10 +32,11 @@
     }
   },
   "dependencies": {
-    "npx": "^10.2.0"
+    "npx": "~10.2.2"
   },
   "devDependencies": {
     "@fitbit/sdk": "~4.1.0",
+    "@fitbit/sdk-build-targets": "^1.4.1",
     "@fitbit/sdk-cli": "~1.7.1",
     "@typescript-eslint/eslint-plugin": "^2.32.0",
     "@typescript-eslint/parser": "^2.32.0",
