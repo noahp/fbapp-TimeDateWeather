@@ -11,8 +11,8 @@ clock.granularity = "minutes";
 
 // These are modified at runtime, save initial values
 const steps_fontSize = document.getElementById("steps").style.fontSize;
-const weather_forecast_fontSize = document.getElementById("weather_forecast")
-  .style.fontSize;
+const weather_forecast_fontSize = document.getElementById("weather_forecast").style.fontSize;
+const weather_temperature_fontSize = document.getElementById("weather_temperature").style.fontSize;
 
 // Detect screen size
 import { me as device } from "device";
@@ -139,6 +139,7 @@ function weatherFromFile() {
   let temp_text = "";
   let temp_suffix = "";
   let is_celsius = weatherjson.is_celsius;
+  // don't show suffix if weather is stale
   if (!stale) {
     if (is_celsius) {
       temp_text = weatherjson.temperatureC.toFixed(0);
@@ -148,6 +149,11 @@ function weatherFromFile() {
       temp_text = weatherjson.temperatureF.toFixed(0);
       temp_suffix = "°F";
     }
+  }
+
+  // resize temp fontsize if on constrained screen
+  if (device.screen.width < 348) {
+    document.getElementById("weather_temperature").style.fontSize = weather_temperature_fontSize - 4;
   }
 
   document.getElementById("weather_temperature").text = temp_text + temp_suffix;
@@ -160,9 +166,12 @@ function weatherFromFile() {
     "weather_forecast"
   ).style.fontSize = forecast_fontsize;
   document.getElementById("weather_forecast").text = weatherjson.forecast;
+<<<<<<< HEAD
   document.getElementById(
     "weather_location"
   ).text = weatherjson.location.substring(0, 16);
+=======
+>>>>>>> 8e3e655... owm one api, try to fix atlas/vulcan layout
 
   // update icon. TODO add night variants
   // icons from here: https://www.flaticon.com/packs/weather-97

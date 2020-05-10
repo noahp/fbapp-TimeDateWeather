@@ -42,15 +42,6 @@ text#weather_forecast {
   fill: fb-orange;
 }
 
-text#weather_location {
-  font-size: 18;
-  text-length: 16;
-  text-anchor: start;
-  /*   x: 50%; */
-  /*   y: 50%+40; */
-  fill: fb-pink;
-}
-
 .stats {
   font-size: 24;
   font-family: Seville-Bold-Italic;
