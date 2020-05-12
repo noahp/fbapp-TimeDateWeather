@@ -10,8 +10,8 @@ text#date {
   font-size: 29;
   text-length: 32;
   text-anchor: middle;
-/*   x: 50%; */
-/*   y: 50%+40; */
+  /*   x: 50%; */
+  /*   y: 50%+40; */
   fill: fb-yellow;
 }
 
@@ -19,8 +19,8 @@ text#time {
   font-size: 100;
   text-length: 32;
   text-anchor: middle;
-/*   x: 50%; */
-/*   y: 50%+40; */
+  /*   x: 50%; */
+  /*   y: 50%+40; */
   fill: fb-lime;
 }
 
@@ -28,8 +28,8 @@ text#weather_temperature {
   font-size: 25;
   text-length: 32;
   text-anchor: start;
-/*   x: 50%; */
-/*   y: 50%+40; */
+  /*   x: 50%; */
+  /*   y: 50%+40; */
   fill: fb-pink;
 }
 
@@ -37,8 +37,8 @@ text#weather_forecast {
   font-size: 25;
   text-length: 32;
   text-anchor: end;
-/*   x: 50%; */
-/*   y: 50%+40; */
+  /*   x: 50%; */
+  /*   y: 50%+40; */
   fill: fb-orange;
 }
 
@@ -46,8 +46,8 @@ text#weather_location {
   font-size: 18;
   text-length: 16;
   text-anchor: start;
-/*   x: 50%; */
-/*   y: 50%+40; */
+  /*   x: 50%; */
+  /*   y: 50%+40; */
   fill: fb-pink;
 }
 
@@ -56,7 +56,7 @@ text#weather_location {
   font-family: Seville-Bold-Italic;
   text-length: 32;
   text-anchor: start;
-/*   x: 50%; */
-/*   y: 50%+40; */
+  /*   x: 50%; */
+  /*   y: 50%+40; */
   fill: fb-cerulean;
 }

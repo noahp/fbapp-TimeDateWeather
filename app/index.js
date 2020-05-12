@@ -1,6 +1,5 @@
 import clock from "clock";
 import document from "document";
-import * as messaging from "messaging";
 import { preferences } from "user-settings";
 import { inbox } from "file-transfer";
 import * as fs from "fs";
@@ -12,7 +11,8 @@ clock.granularity = "minutes";
 
 // These are modified at runtime, save initial values
 const steps_fontSize = document.getElementById("steps").style.fontSize;
-const weather_forecast_fontSize = document.getElementById("weather_forecast").style.fontSize;
+const weather_forecast_fontSize = document.getElementById("weather_forecast")
+  .style.fontSize;
 
 // Detect screen size
 import { me as device } from "device";
@@ -22,8 +22,8 @@ if (!device.screen) device.screen = { width: 348, height: 250 };
 var hrm = new HeartRateSensor();
 
 hrm.onreading = function () {
-  document.getElementById("hr").text = ( hrm.heartRate > 0 ) ? hrm.heartRate : "--";
-}
+  document.getElementById("hr").text = hrm.heartRate > 0 ? hrm.heartRate : "--";
+};
 hrm.start();
 
 // Refresh weather, steps, and time/date each clock tick
@@ -37,19 +37,47 @@ clock.ontick = (evt) => {
   let mins = today.getMinutes();
   if (mins < 10) {
     // zero pad
-    mins = "0" + mins
+    mins = "0" + mins;
   }
   document.getElementById("time").text = `${hours}:${mins}`;
 
   // Set date
-  const monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
-  const shortMonthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
-  "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+  const shortMonthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "June",
+    "July",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
-  const dayOfWeekNames = ["Sunday", "Monday", "Tuesday", "Wednesday",
-    "Thursday", "Friday", "Saturday"
+  const dayOfWeekNames = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
   ];
 
   // use shortened month form if we overflow the buffer
@@ -57,8 +85,9 @@ clock.ontick = (evt) => {
   let month = today.getMonth();
   let month_date = today.getDate();
   let date = `${dayOfWeekNames[dayofweek]}, ${monthNames[month]} ${month_date}`;
-  if (date.length > 20) {  // TODO get from stylesheet?
-    date = `${dayOfWeekNames[dayofweek]}, ${shortMonthNames[month]} ${month_date}`
+  if (date.length > 20) {
+    // TODO get from stylesheet?
+    date = `${dayOfWeekNames[dayofweek]}, ${shortMonthNames[month]} ${month_date}`;
   }
   document.getElementById("date").text = date;
 
@@ -70,27 +99,28 @@ clock.ontick = (evt) => {
   let step_fontsize = steps_fontSize;
 
   // If device is 300 pixels high (versa), don't scale down steps
-  if ((device.screen.height < 300) && (steps > 99999)) {
+  if (device.screen.height < 300 && steps > 99999) {
     step_fontsize = steps_fontSize - 6;
   }
   document.getElementById("steps").style.fontSize = step_fontsize;
   document.getElementById("steps").text = steps;
-}
+};
 
 function weatherFromFile() {
   // Refresh weather data from current file
   let now = new Date().getTime();
   let stale = false;
+  var weatherjson;
   try {
-    let weatherjson  = fs.readFileSync("weather.cbor", "cbor");
-  } catch(e) {
+    weatherjson = fs.readFileSync("weather.cbor", "cbor");
+  } catch (e) {
     console.log("Error " + e);
-    let weatherjson = {
-      temperatureF : "NA",
-      location : "<unknown>",
-      forecast : "",
-      conditionCode : 1000,
-      timestamp : now - 30 * 60 * 1000 + 1,
+    weatherjson = {
+      temperatureF: "NA",
+      location: "<unknown>",
+      forecast: "",
+      conditionCode: 1000,
+      timestamp: now - 30 * 60 * 1000 + 1,
     };
     stale = true;
   }
@@ -102,8 +132,7 @@ function weatherFromFile() {
     weatherjson.location = "<unknown>";
     weatherjson.forecast = "";
     weatherjson.conditionCode = 1000;
-  }
-  else {
+  } else {
     console.log("Weather data read: " + JSON.stringify(weatherjson));
   }
 
@@ -114,8 +143,7 @@ function weatherFromFile() {
     if (is_celsius) {
       temp_text = weatherjson.temperatureC.toFixed(0);
       temp_suffix = "°C";
-    }
-    else {
+    } else {
       // fahrenheit
       temp_text = weatherjson.temperatureF.toFixed(0);
       temp_suffix = "°F";
@@ -128,33 +156,39 @@ function weatherFromFile() {
   if (weatherjson.forecast.length > 5) {
     forecast_fontsize = weather_forecast_fontSize - 4;
   }
-  document.getElementById("weather_forecast").style.fontSize = forecast_fontsize;
+  document.getElementById(
+    "weather_forecast"
+  ).style.fontSize = forecast_fontsize;
   document.getElementById("weather_forecast").text = weatherjson.forecast;
-  document.getElementById("weather_location").text = weatherjson.location.substring(0, 16);
+  document.getElementById(
+    "weather_location"
+  ).text = weatherjson.location.substring(0, 16);
 
   // update icon. TODO add night variants
   // icons from here: https://www.flaticon.com/packs/weather-97
   const conditionToIcon = {
-    0 : "0_sun.png",
-    1 : "1_sunny.png",
-    2 : "2_cloudy-night.png",
-    3 : "3_cloud.png",
-    4 : "4_sprinkle.png",
-    5 : "5_raindrop.png",
-    6 : "6_storm.png",
-    7 : "7_snowy.png",
-    8 : "8_haze.png",
-    9 : "3_cloud.png",
-    1000 : "1000_question.png",
-  }
-  document.getElementById("weather_icon").href = `weather/${conditionToIcon[weatherjson.conditionCode]}`
+    0: "0_sun.png",
+    1: "1_sunny.png",
+    2: "2_cloudy-night.png",
+    3: "3_cloud.png",
+    4: "4_sprinkle.png",
+    5: "5_raindrop.png",
+    6: "6_storm.png",
+    7: "7_snowy.png",
+    8: "8_haze.png",
+    9: "3_cloud.png",
+    1000: "1000_question.png",
+  };
+  document.getElementById("weather_icon").href = `weather/${
+    conditionToIcon[weatherjson.conditionCode]
+  }`;
 }
 
 document.getElementById("myRect");
 
-document.getElementById("weather_forecast").onclick = function(e) {
+document.getElementById("weather_forecast").onclick = function () {
   console.log("click");
-}
+};
 
 // always check for new files on launch
 function handleNewFiles() {
@@ -171,6 +205,6 @@ function handleNewFiles() {
 }
 handleNewFiles();
 
-inbox.onnewfile = (evt) => {
+inbox.onnewfile = () => {
   handleNewFiles();
-}
+};

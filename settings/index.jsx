@@ -2,14 +2,16 @@ function timeDateWeather(props) {
   return (
     <Page>
       <Section
-        title={<Text bold align="center">TimeDateWeather Settings</Text>}>
+        title={
+          <Text bold align="center">
+            TimeDateWeather Settings
+          </Text>
+        }
+      >
         <Select
           label={`Celsius / Fahrenheit`}
           settingsKey="CelsiusOrFahrenheit"
-          options={[
-            {name:"Celsius"},
-            {name:"Fahrenheit"}
-          ]}
+          options={[{ name: "Celsius" }, { name: "Fahrenheit" }]}
         />
         <TextInput
           label="Open Weather Map API key"

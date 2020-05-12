@@ -21,5 +21,7 @@ DOCKER_BUILDKIT=1 docker build -t "$DOCKER_IMAGE_NAME" --build-arg "UID=$(id -u)
 docker run -v"$(pwd):/mnt/workspace" -t "$DOCKER_IMAGE_NAME" bash -c \
     "cd /mnt/workspace && \
      npm install && \
+     ./node_modules/.bin/npx eslint . &&
+     ./node_modules/.bin/npx prettier --check .
      ./node_modules/.bin/npx fitbit-build && \
      ls -lh build/app.fba"
