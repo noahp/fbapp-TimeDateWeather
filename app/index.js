@@ -5,6 +5,7 @@ import { inbox } from "file-transfer";
 import * as fs from "fs";
 import userActivity from "user-activity";
 import { HeartRateSensor } from "heart-rate";
+import { battery } from "power";
 
 // Tick fires every minute
 clock.granularity = "minutes";
@@ -21,13 +22,40 @@ const weather_temperature_fontSize = document.getElementById(
 import { me as device } from "device";
 if (!device.screen) device.screen = { width: 348, height: 250 };
 
+function heart_rate_update() {
+  document.getElementById("hr").text = hrm.heartRate > 0 ? hrm.heartRate : "--";
+}
+
+function battery_update() {
+  document.getElementById("battery").text =
+    Math.floor(battery.chargeLevel) + "%";
+}
+
 // Update hr every reading
 var hrm = new HeartRateSensor();
 
 hrm.onreading = function () {
-  document.getElementById("hr").text = hrm.heartRate > 0 ? hrm.heartRate : "--";
+  heart_rate_update();
 };
 hrm.start();
+
+// Toggle between hr + battery display
+document.getElementById("time").onclick = function () {
+  // var turn_on_elems = [];
+  let hr_elems = [
+    document.getElementById("hr_icon"),
+    document.getElementById("hr"),
+    document.getElementById("battery_icon"),
+    document.getElementById("battery"),
+  ];
+
+  // toggle
+  hr_elems.forEach(function (item, index) {
+    index;
+    item.style.visibility =
+      item.style.visibility === "visible" ? "hidden" : "visible";
+  });
+};
 
 // Refresh weather, steps, and time/date each clock tick
 clock.ontick = (evt) => {
@@ -104,6 +132,11 @@ clock.ontick = (evt) => {
   // If device is 300 pixels high (versa), don't scale down steps
   if (device.screen.height < 300 && steps > 99999) {
     step_fontsize = steps_fontSize - 6;
+  }
+
+  // over 10k
+  if (steps > 9999) {
+    steps = (steps / 1000).toFixed(1) + "k";
   }
   document.getElementById("steps").style.fontSize = step_fontsize;
   document.getElementById("steps").text = steps;
@@ -189,6 +222,9 @@ function weatherFromFile() {
   document.getElementById("weather_icon").href = `weather/${
     conditionToIcon[weatherjson.conditionCode]
   }`;
+
+  battery_update();
+  heart_rate_update();
 }
 
 document.getElementById("myRect");
