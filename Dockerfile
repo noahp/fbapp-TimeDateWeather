@@ -1,13 +1,20 @@
-FROM ubuntu:bionic
+FROM ubuntu:focal
 
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
-    libsecret-1-dev \
-    libssl1.0-dev \
+    ca-certificates \
+    curl \
+    software-properties-common
+
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | \
+    tee /etc/apt/sources.list.d/yarn.list
+
+RUN apt-get update && apt-get install -y \
+    libsecret-1-0 \
     node-gyp \
-    nodejs-dev \
-    npm
+    yarn
 
 # get user id from build arg, so we can have read/write access to directories
 # mounted inside the container. only the UID is necessary, UNAME just for

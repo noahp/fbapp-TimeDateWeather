@@ -34,7 +34,11 @@
   },
   "devDependencies": {
     "@fitbit/sdk": "~4.1.0",
-    "@fitbit/sdk-cli": "~1.7.1"
+    "@fitbit/sdk-cli": "~1.7.1",
+    "@typescript-eslint/eslint-plugin": "^2.32.0",
+    "@typescript-eslint/parser": "^2.32.0",
+    "eslint": "7.0.0",
+    "prettier": "2.0.5"
   },
   "scripts": {
     "build": "fitbit-build"
