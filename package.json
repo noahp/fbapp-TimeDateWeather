@@ -35,8 +35,8 @@
     "npx": "~10.2.2"
   },
   "devDependencies": {
-    "@fitbit/sdk": "~4.1.0",
-    "@fitbit/sdk-build-targets": "^1.4.1",
+    "@fitbit/sdk": "5.0.0-pre.1",
+    "@fitbit/sdk-build-targets": "^1.5.0",
     "@fitbit/sdk-cli": "~1.7.1",
     "@typescript-eslint/eslint-plugin": "^2.32.0",
     "@typescript-eslint/parser": "^2.32.0",

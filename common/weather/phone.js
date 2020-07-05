@@ -101,8 +101,7 @@ function prv_fetchRemote(provider, apiKey, feelsLike) {
             let answer = {};
             answer[WEATHER_MESSAGE_KEY] = { error: error };
             peerSocket.send(answer);
-          }
-          else {
+          } else {
             console.error("Error : " + JSON.stringify(error) + " " + error);
           }
         }
@@ -113,20 +112,27 @@ function prv_fetchRemote(provider, apiKey, feelsLike) {
         let answer = {};
         answer[WEATHER_MESSAGE_KEY] = { error: error };
         peerSocket.send(answer);
-      }
-      else {
+      } else {
         console.error("Location Error : " + error.message);
       }
     },
-    { "enableHighAccuracy": false, "maximumAge": 1000 * 1800 });
+    { enableHighAccuracy: false, maximumAge: 1000 * 1800 }
+  );
 }
 
-function prv_fetch(provider, apiKey, feelsLike, latitude, longitude, success, error) {
+function prv_fetch(
+  provider,
+  apiKey,
+  feelsLike,
+  latitude,
+  longitude,
+  success,
+  error
+) {
   // console.info("Latitude: " + latitude + " Longitude: " + longitude);
   if (provider === "owm") {
     prv_queryOWMWeather(apiKey, latitude, longitude, success, error);
-  }
-  else {
+  } else {
     console.error("Error : unsupported provider " + provider);
   }
 }
@@ -150,11 +156,17 @@ function prv_owm_condition_to_forecast(condition) {
 function prv_queryOWMWeather(apiKey, latitude, longitude, success, error) {
   // fetch forecast. see example resonse in owm-one-api-example.json
   var url =
-    'https://api.openweathermap.org/data/2.5/onecall?appid=' + apiKey +
-    '&lat=' + latitude +
-    '&lon=' + longitude +
-    '&exclude=minutely';
+    "https://api.openweathermap.org/data/2.5/onecall?appid=" +
+    apiKey +
+    "&lat=" +
+    latitude +
+    "&lon=" +
+    longitude +
+    "&exclude=minutely";
   var forecast = "";
+
+  // unused
+  error;
 
   fetch(url)
     .then((response) => {
@@ -178,35 +190,58 @@ function prv_queryOWMWeather(apiKey, latitude, longitude, success, error) {
       }
 
       // get current weather
-      var condition = parseInt(data.current.weather[0].icon.substring(0, 2), 10);
+      var condition = parseInt(
+        data.current.weather[0].icon.substring(0, 2),
+        10
+      );
       switch (condition) {
-        case 1: condition = Conditions.ClearSky; break;
-        case 2: condition = Conditions.FewClouds; break;
-        case 3: condition = Conditions.ScatteredClouds; break;
-        case 4: condition = Conditions.BrokenClouds; break;
-        case 9: condition = Conditions.ShowerRain; break;
-        case 10: condition = Conditions.Rain; break;
-        case 11: condition = Conditions.Thunderstorm; break;
-        case 13: condition = Conditions.Snow; break;
-        case 50: condition = Conditions.Mist; break;
-        default: condition = Conditions.Unknown; break;
+        case 1:
+          condition = Conditions.ClearSky;
+          break;
+        case 2:
+          condition = Conditions.FewClouds;
+          break;
+        case 3:
+          condition = Conditions.ScatteredClouds;
+          break;
+        case 4:
+          condition = Conditions.BrokenClouds;
+          break;
+        case 9:
+          condition = Conditions.ShowerRain;
+          break;
+        case 10:
+          condition = Conditions.Rain;
+          break;
+        case 11:
+          condition = Conditions.Thunderstorm;
+          break;
+        case 13:
+          condition = Conditions.Snow;
+          break;
+        case 50:
+          condition = Conditions.Mist;
+          break;
+        default:
+          condition = Conditions.Unknown;
+          break;
       }
 
-      let isDay = (
-        data.current.dt > data.current.sunrise && data.current.dt < data.current.sunset
-      );
+      let isDay =
+        data.current.dt > data.current.sunrise &&
+        data.current.dt < data.current.sunset;
 
       let weather = {
         //temperatureK : data.current.temp.toFixed(1),
         temperatureC: data.current.temp - 273.15,
-        temperatureF: (data.current.temp - 273.15) * 9 / 5 + 32,
+        temperatureF: ((data.current.temp - 273.15) * 9) / 5 + 32,
         description: data.current.weather[0].description,
         isDay: isDay,
         conditionCode: condition,
         sunrise: data.current.sunrise * 1000,
         sunset: data.current.sunset * 1000,
         timestamp: new Date().getTime(),
-        forecast: forecast
+        forecast: forecast,
       };
       // Send the weather data to the device
       if (success) {

@@ -3,7 +3,7 @@
 }
 
 text {
-  font-family: Colfax-Medium;
+  font-family: System-Regular;
 }
 
 text#date {
@@ -44,7 +44,7 @@ text#weather_forecast {
 
 .stats {
   font-size: 24;
-  font-family: Seville-Bold-Italic;
+  font-family: System-Regular;
   text-length: 32;
   text-anchor: start;
   /*   x: 50%; */

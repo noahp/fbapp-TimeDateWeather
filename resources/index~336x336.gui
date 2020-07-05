@@ -28,16 +28,16 @@
   <section x="90" y="70%" width="50%" height="30%">
 <!--     <rect x="0" y="0" width="100%" height="100%" fill="green"/> -->
     <text id="weather_temperature" x="6" y="30"></text>
-    <text id="weather_forecast" x="100%-6" y="55" pointer-events="visible"></text>
+    <text id="weather_forecast" x="6" y="55" pointer-events="visible"></text>
   </section>
 
 <!--   step count, hr -->
-  <section x="0" y="90%" width="50%-64" height="30%">
+  <section x="60%" y="70%" width="50%-64" height="30%">
 <!--     <rect x="0" y="0" width="100%" height="100%" fill="cyan"/> -->
-    <image id="steps_icon" x="6" y="6" height="22" width="22" href="steps.png" load="sync" />
+    <image id="steps_icon" x="0" y="6" height="22" width="22" href="steps.png" load="sync" />
     <text id="steps" class="stats" x="38" y="26"></text>
-    <image id="hr_icon" x="200" y="6" height="22" width="22" href="hr.png" load="sync" />
-    <text id="hr" class="stats" x="200+38" y="26"></text>
+    <image id="hr_icon" x="0" y="36" height="22" width="22" href="hr.png" load="sync" />
+    <text id="hr" class="stats" x="38" y="36"></text>
   </section>
 
 </svg>
