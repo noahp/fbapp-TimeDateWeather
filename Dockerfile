@@ -26,3 +26,5 @@ RUN useradd --uid $UID --create-home --user-group ${UNAME} && \
     echo "${UNAME}:${UNAME}" | chpasswd && adduser ${UNAME} sudo
 
 USER ${UNAME}
+
+WORKDIR /mnt/workspace
