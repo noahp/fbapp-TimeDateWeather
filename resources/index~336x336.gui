@@ -4,7 +4,7 @@
   </defs>
 
 <!--   date -->
-  <section x="5" y="0" width="100%" height="20%">
+  <section x="5" y="7" width="100%" height="20%">
 <!--     <rect x="0" y="0" width="100%" height="100%" fill="blue"/> -->
     <text id="date" x="50%" y="35"></text>
   </section>

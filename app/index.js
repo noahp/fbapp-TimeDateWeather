@@ -110,15 +110,34 @@ clock.ontick = (evt) => {
     "Friday",
     "Saturday",
   ];
+  const shortDayOfWeekNames = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wed",  // alas, wednesday
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
 
   // use shortened month form if we overflow the buffer
   let dayofweek = today.getDay();
   let month = today.getMonth();
   let month_date = today.getDate();
+
   let date = `${dayOfWeekNames[dayofweek]}, ${monthNames[month]} ${month_date}`;
-  if (date.length > 20) {
+
+  let truncate_size = 20;
+  let day_name_arr = dayOfWeekNames;
+
+  if (device.screen.width < 348) {
+    truncate_size = 17;
+    day_name_arr = shortDayOfWeekNames;
+  }
+
+  if (date.length > truncate_size) {
     // TODO get from stylesheet?
-    date = `${dayOfWeekNames[dayofweek]}, ${shortMonthNames[month]} ${month_date}`;
+    date = `${day_name_arr[dayofweek]}, ${shortMonthNames[month]} ${month_date}`;
   }
   document.getElementById("date").text = date;
 
