@@ -12,9 +12,10 @@ console.log("Started companion!");
 let weather = new Weather();
 
 weather.setProvider("owm"); // only support owm for now
+let settings_api_key = JSON.parse(settingsStorage.getItem("owm_apikey")).name;
 weather.setApiKey(
-  settingsStorage.getItem("owm_apikey")
-    ? settingsStorage.getItem("owm_apikey")
+  settings_api_key
+    ? settings_api_key
     : "76fa7dd2f60e6e7eb5421f1512b9dbc3"
 );
 weather.setFeelsLike(true);
@@ -23,8 +24,8 @@ weather.onsuccess = (data) => {
   // set celsius/fahrenheit setting
   let is_celsius = settingsStorage.getItem("CelsiusOrFahrenheit")
     ? JSON.parse(settingsStorage.getItem("CelsiusOrFahrenheit"))["values"][0][
-        "name"
-      ] == "Celsius"
+    "name"
+    ] == "Celsius"
     : null;
   if (is_celsius) {
     data["is_celsius"] = true;
