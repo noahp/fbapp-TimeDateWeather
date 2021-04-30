@@ -22,6 +22,6 @@ docker run -v"$(pwd):/mnt/workspace" -t "$DOCKER_IMAGE_NAME" bash -c \
     "yarn install && \
      export PATH=\$PWD/node_modules/.bin:\$PATH &&
      npx eslint . &&
-     npx prettier --check .
+     npx prettier --check . && \
      npx fitbit-build && \
      ls -lh build/app.fba"
