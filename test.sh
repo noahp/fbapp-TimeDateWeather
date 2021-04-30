@@ -20,7 +20,8 @@ DOCKER_BUILDKIT=1 docker build -t "$DOCKER_IMAGE_NAME" --build-arg "UID=$(id -u)
 # run the test build
 docker run -v"$(pwd):/mnt/workspace" -t "$DOCKER_IMAGE_NAME" bash -c \
     "yarn install && \
-     ./node_modules/.bin/npx eslint . &&
-     ./node_modules/.bin/npx prettier --check .
-     ./node_modules/.bin/npx fitbit-build && \
+     export PATH=\$PWD/node_modules/.bin:\$PATH &&
+     npx eslint . &&
+     npx prettier --check .
+     npx fitbit-build && \
      ls -lh build/app.fba"
