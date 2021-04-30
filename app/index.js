@@ -114,7 +114,7 @@ clock.ontick = (evt) => {
     "Sunday",
     "Monday",
     "Tuesday",
-    "Wed",  // alas, wednesday
+    "Wed", // alas, wednesday
     "Thursday",
     "Friday",
     "Saturday",

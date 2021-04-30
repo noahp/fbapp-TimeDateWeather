@@ -12,7 +12,7 @@ text#date {
   text-anchor: middle;
   /*   x: 50%; */
   /*   y: 50%+40; */
-  fill: #E4FA3C; /* fb-yellow; */
+  fill: #e4fa3c; /* fb-yellow; */
 }
 
 text#time {
@@ -21,7 +21,7 @@ text#time {
   text-anchor: middle;
   /*   x: 50%; */
   /*   y: 50%+40; */
-  fill: #B8FC68; /* fb-lime; */
+  fill: #b8fc68; /* fb-lime; */
 }
 
 text#weather_temperature {
@@ -30,7 +30,7 @@ text#weather_temperature {
   text-anchor: start;
   /*   x: 50%; */
   /*   y: 50%+40; */
-  fill: #F80070; /* fb-pink; */
+  fill: #f80070; /* fb-pink; */
 }
 
 text#weather_forecast {
@@ -39,7 +39,7 @@ text#weather_forecast {
   text-anchor: end;
   /*   x: 50%; */
   /*   y: 50%+40; */
-  fill: #FF4500; /*fb-orange;*/
+  fill: #ff4500; /*fb-orange;*/
 }
 
 .stats {
@@ -49,5 +49,5 @@ text#weather_forecast {
   text-anchor: start;
   /*   x: 50%; */
   /*   y: 50%+40; */
-  fill: #8080FF; /* fb-cerulean; */
+  fill: #8080ff; /* fb-cerulean; */
 }
