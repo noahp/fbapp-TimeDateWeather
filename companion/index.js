@@ -14,9 +14,7 @@ let weather = new Weather();
 weather.setProvider("owm"); // only support owm for now
 let settings_api_key = JSON.parse(settingsStorage.getItem("owm_apikey")).name;
 weather.setApiKey(
-  settings_api_key
-    ? settings_api_key
-    : "76fa7dd2f60e6e7eb5421f1512b9dbc3"
+  settings_api_key ? settings_api_key : "76fa7dd2f60e6e7eb5421f1512b9dbc3"
 );
 weather.setFeelsLike(true);
 
@@ -61,10 +59,8 @@ me.onwakeinterval = () => {
 };
 
 // refresh weather on settings change
-settingsStorage.onchange = function (evt) {
-  if (evt.key == "CelsiusOrFahrenheit") {
-    weather.fetch();
-  }
+settingsStorage.onchange = function () {
+  weather.fetch();
 };
 
 // Freshen up weather data on launch

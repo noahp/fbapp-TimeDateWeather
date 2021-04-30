@@ -5,6 +5,7 @@ import { inbox } from "file-transfer";
 import * as fs from "fs";
 import userActivity from "user-activity";
 import { HeartRateSensor } from "heart-rate";
+import { battery } from "power";
 
 // Tick fires every minute
 clock.granularity = "minutes";
@@ -13,18 +14,48 @@ clock.granularity = "minutes";
 const steps_fontSize = document.getElementById("steps").style.fontSize;
 const weather_forecast_fontSize = document.getElementById("weather_forecast")
   .style.fontSize;
+const weather_temperature_fontSize = document.getElementById(
+  "weather_temperature"
+).style.fontSize;
 
 // Detect screen size
 import { me as device } from "device";
 if (!device.screen) device.screen = { width: 348, height: 250 };
 
+function heart_rate_update() {
+  document.getElementById("hr").text = hrm.heartRate > 0 ? hrm.heartRate : "--";
+}
+
+function battery_update() {
+  document.getElementById("battery").text =
+    Math.floor(battery.chargeLevel) + "%";
+}
+
 // Update hr every reading
 var hrm = new HeartRateSensor();
 
 hrm.onreading = function () {
-  document.getElementById("hr").text = hrm.heartRate > 0 ? hrm.heartRate : "--";
+  heart_rate_update();
 };
 hrm.start();
+
+// Toggle between hr + battery display
+document.getElementById("time").onclick = function () {
+  // var turn_on_elems = [];
+  let hr_elems = [
+    document.getElementById("hr_icon"),
+    document.getElementById("hr"),
+    document.getElementById("battery_icon"),
+    document.getElementById("battery"),
+  ];
+
+  // toggle
+  hr_elems.forEach(function (item, index) {
+    index;
+    item.style.visibility =
+      item.style.visibility === "visible" ? "hidden" : "visible";
+  });
+};
 
 // Refresh weather, steps, and time/date each clock tick
 clock.ontick = (evt) => {
@@ -79,15 +110,34 @@ clock.ontick = (evt) => {
     "Friday",
     "Saturday",
   ];
+  const shortDayOfWeekNames = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wed", // alas, wednesday
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
 
   // use shortened month form if we overflow the buffer
   let dayofweek = today.getDay();
   let month = today.getMonth();
   let month_date = today.getDate();
+
   let date = `${dayOfWeekNames[dayofweek]}, ${monthNames[month]} ${month_date}`;
-  if (date.length > 20) {
+
+  let truncate_size = 20;
+  let day_name_arr = dayOfWeekNames;
+
+  if (device.screen.width < 348) {
+    truncate_size = 17;
+    day_name_arr = shortDayOfWeekNames;
+  }
+
+  if (date.length > truncate_size) {
     // TODO get from stylesheet?
-    date = `${dayOfWeekNames[dayofweek]}, ${shortMonthNames[month]} ${month_date}`;
+    date = `${day_name_arr[dayofweek]}, ${shortMonthNames[month]} ${month_date}`;
   }
   document.getElementById("date").text = date;
 
@@ -101,6 +151,11 @@ clock.ontick = (evt) => {
   // If device is 300 pixels high (versa), don't scale down steps
   if (device.screen.height < 300 && steps > 99999) {
     step_fontsize = steps_fontSize - 6;
+  }
+
+  // over 10k
+  if (steps > 9999) {
+    steps = (steps / 1000).toFixed(1) + "k";
   }
   document.getElementById("steps").style.fontSize = step_fontsize;
   document.getElementById("steps").text = steps;
@@ -139,6 +194,7 @@ function weatherFromFile() {
   let temp_text = "";
   let temp_suffix = "";
   let is_celsius = weatherjson.is_celsius;
+  // don't show suffix if weather is stale
   if (!stale) {
     if (is_celsius) {
       temp_text = weatherjson.temperatureC.toFixed(0);
@@ -148,6 +204,12 @@ function weatherFromFile() {
       temp_text = weatherjson.temperatureF.toFixed(0);
       temp_suffix = "°F";
     }
+  }
+
+  // resize temp fontsize if on constrained screen
+  if (device.screen.width < 348) {
+    document.getElementById("weather_temperature").style.fontSize =
+      weather_temperature_fontSize - 4;
   }
 
   document.getElementById("weather_temperature").text = temp_text + temp_suffix;
@@ -160,9 +222,6 @@ function weatherFromFile() {
     "weather_forecast"
   ).style.fontSize = forecast_fontsize;
   document.getElementById("weather_forecast").text = weatherjson.forecast;
-  document.getElementById(
-    "weather_location"
-  ).text = weatherjson.location.substring(0, 16);
 
   // update icon. TODO add night variants
   // icons from here: https://www.flaticon.com/packs/weather-97
@@ -182,6 +241,9 @@ function weatherFromFile() {
   document.getElementById("weather_icon").href = `weather/${
     conditionToIcon[weatherjson.conditionCode]
   }`;
+
+  battery_update();
+  heart_rate_update();
 }
 
 document.getElementById("myRect");
