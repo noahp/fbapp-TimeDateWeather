@@ -7,25 +7,25 @@ text {
 }
 
 text#date {
-  font-size: 29;
+  font-size: 33;
   text-length: 32;
   text-anchor: middle;
   /*   x: 50%; */
   /*   y: 50%+40; */
-  fill: #E4FA3C; /* fb-yellow; */
+  fill: #FFCC33; /* #E4FA3C; /* fb-yellow; */
 }
 
 text#time {
-  font-size: 100;
+  font-size: 125;
   text-length: 32;
   text-anchor: middle;
   /*   x: 50%; */
   /*   y: 50%+40; */
-  fill: #B8FC68; /* fb-lime; */
+  fill: #5BE37D; /* fb-lime; */
 }
 
 text#weather_temperature {
-  font-size: 25;
+  font-size: 36;
   text-length: 32;
   text-anchor: start;
   /*   x: 50%; */
@@ -34,9 +34,9 @@ text#weather_temperature {
 }
 
 text#weather_forecast {
-  font-size: 25;
+  font-size: 30;
   text-length: 32;
-  text-anchor: end;
+  text-anchor: start;
   /*   x: 50%; */
   /*   y: 50%+40; */
   fill: #FF4500; /*fb-orange;*/

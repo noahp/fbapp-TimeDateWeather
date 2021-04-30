@@ -24,8 +24,8 @@ weather.onsuccess = (data) => {
   // set celsius/fahrenheit setting
   let is_celsius = settingsStorage.getItem("CelsiusOrFahrenheit")
     ? JSON.parse(settingsStorage.getItem("CelsiusOrFahrenheit"))["values"][0][
-        "name"
-      ] == "Celsius"
+    "name"
+    ] == "Celsius"
     : null;
   if (is_celsius) {
     data["is_celsius"] = true;

@@ -18,10 +18,8 @@
       "access_heart_rate"
     ],
     "buildTargets": [
-      "higgs",
-      "meson",
-      "gemini",
-      "mira"
+      "atlas",
+      "vulcan"
     ],
     "i18n": {
       "en": {
@@ -30,11 +28,11 @@
     }
   },
   "dependencies": {
-    "npx": "^10.2.0"
+    "npx": "~10.2.2"
   },
   "devDependencies": {
-    "@fitbit/sdk": "~4.1.0",
-    "@fitbit/sdk-cli": "~1.7.1",
+    "@fitbit/sdk": "~5.0.1",
+    "@fitbit/sdk-cli": "^1.7.3",
     "@typescript-eslint/eslint-plugin": "^2.32.0",
     "@typescript-eslint/parser": "^2.32.0",
     "eslint": "7.0.0",
