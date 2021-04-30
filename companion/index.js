@@ -61,10 +61,8 @@ me.onwakeinterval = () => {
 };
 
 // refresh weather on settings change
-settingsStorage.onchange = function (evt) {
-  if (evt.key == "CelsiusOrFahrenheit") {
-    weather.fetch();
-  }
+settingsStorage.onchange = function () {
+  weather.fetch();
 };
 
 // Freshen up weather data on launch
