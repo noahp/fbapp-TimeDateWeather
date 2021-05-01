@@ -18,7 +18,14 @@ DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME:-$(basename -s .git "$(git remote --verbos
 DOCKER_BUILDKIT=1 docker build -t "$DOCKER_IMAGE_NAME" --build-arg "UID=$(id -u)" -f Dockerfile .
 
 # run the test build
-docker run -v"$(pwd):/mnt/workspace" -t "$DOCKER_IMAGE_NAME" bash -c \
+# connect stdin if not in CI
+if [[ $CI != true ]]; then
+    INTERACTIVE_ARGS=-i
+fi
+
+docker run -t $INTERACTIVE_ARGS --rm \
+    --volume "$(pwd):/mnt/workspace" \
+    "$DOCKER_IMAGE_NAME" bash -c \
     "yarn install && \
      export PATH=\$PWD/node_modules/.bin:\$PATH &&
      npx eslint . &&
