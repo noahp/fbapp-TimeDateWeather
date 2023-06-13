@@ -1,3 +1,8 @@
+_I no longer use this clockface, so I won't be doing much maintenance on it
+going forward. Please feel free to fork it and modify however you like though!_
+
+---
+
 [![GitHub Workflow
 Status](https://img.shields.io/github/workflow/status/noahp/fbapp-TimeDateWeather/main-ci?style=for-the-badge)](https://github.com/noahp/fbapp-TimeDateWeather/actions)
 
